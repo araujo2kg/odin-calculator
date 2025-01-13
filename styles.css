@@ -12,4 +12,66 @@ html,
 body {
     height: 100%;
     margin: 0;
+    background-color: #edede9;
+}
+
+body {
+    align-content: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    width: 330px;
+    background-color: black;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.display {
+    height: 50px;
+    border: 1px solid black;
+    border-bottom: 0;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    text-align: end;
+    font-size: 34px;
+    font-weight: lighter;
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons button {
+    background-color: gold;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 0;
+    width: 75px;
+    height: 60px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.buttons button:hover {
+    background-color: red;
+}
+
+button[value="="] {
+    width: 150px;
+    height: 60px;
+    background-color: tomato;
 }
