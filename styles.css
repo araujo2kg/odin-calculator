@@ -41,9 +41,17 @@ body {
     color: white;
     justify-content: center;
     align-items: center;
-    gap: 2px;
     text-align: end;
+    margin-bottom: 10px;
+}
+
+.result {
     font-size: 34px;
+    font-weight: lighter;
+}
+
+.operation {
+    font-size: 12px;
     font-weight: lighter;
 }
 

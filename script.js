@@ -1,6 +1,7 @@
-let operand1 = 0;
-let operand2 = 0;
-let operator = "+";
+let operand1 = "";
+let operand2 = "";
+let operator = "";
+let result = "";
 
 function add(x, y) {
     return x + y;
@@ -21,22 +22,77 @@ function divide(x, y) {
 function operate(x, operator, y) {
     switch (operator) {
         case "+":
-            add(x, y);
-            break;
+            return add(x, y);
 
         case "-":
-            subtract(x, y);
-            break;
+            return subtract(x, y);
 
         case "*":
-            multiply(x, y);
-            break;
+            return multiply(x, y);
 
         case "/":
-            divide(x, y);
-            break;
+            return divide(x, y);
 
         default:
             console.log("Invalid operator");
     }
 }
+
+function updateDisplay() {
+    const displayResult = document.querySelector(".display .result");
+    const displayOperation = document.querySelector(".display .operation");
+
+    operator
+        ? (displayResult.textContent = operand2)
+        : (displayResult.textContent = operand1);
+
+    operator
+        ? (displayOperation.textContent = `${operand1} ${operator}`)
+        : (displayOperation.textContent = operand1);
+
+    if (result) {
+        displayOperation.textContent = `${operand1} ${operator} ${operand2}`;
+        displayResult.textContent = result;
+    }
+}
+
+function clearAll(chain = false) {
+    if (!chain) operand1 = "";
+    operand2 = "";
+    operator = "";
+    result = "";
+}
+
+// Operands
+const operandsElements = document.querySelectorAll(".operand");
+operandsElements.forEach((element) => {
+    element.addEventListener("click", (event) => {
+        // If operator is set, update operand2
+        if (operator) {
+            operand2 += event.target.value;
+        } else {
+            // If operator is not set, update operand1
+            operand1 += event.target.value;
+        }
+        updateDisplay();
+    });
+});
+
+// Operators
+const operatorsElements = document.querySelectorAll(".operator");
+operatorsElements.forEach((element) => {
+    element.addEventListener("click", (event) => {
+        if (!operator) operator = event.target.value;
+        updateDisplay();
+    });
+});
+
+// Equals
+const equalElement = document.querySelector(".equal");
+equalElement.addEventListener("click", (event) => {
+    result = operate(+operand1, operator, +operand2);
+    updateDisplay();
+    // Set operand1 to the result, for possible chain operation
+    operand1 = result;
+    clearAll(true);
+});
