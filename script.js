@@ -83,7 +83,15 @@ operandsElements.forEach((element) => {
 const operatorsElements = document.querySelectorAll(".operator");
 operatorsElements.forEach((element) => {
     element.addEventListener("click", (event) => {
+        // If operator is not set, set it
         if (!operator) operator = event.target.value;
+        // If operator is set and operands are ready, manually trigger the equals event listener
+        if (operator && operand1 && operand2) {
+            let mouseEvent = new MouseEvent("click");
+            document.querySelector(".equal").dispatchEvent(mouseEvent);
+            // Set the new operator
+            operator = event.target.value;
+        }
         updateDisplay();
     });
 });
