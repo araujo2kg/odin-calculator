@@ -55,6 +55,8 @@ function updateDisplay() {
         displayOperation.textContent = `${operand1} ${operator} ${operand2}`;
         displayResult.textContent = result;
     }
+
+    if (result === Infinity) displayResult.textContent = "What?";
 }
 
 function clearAll(chain = false) {
@@ -84,14 +86,18 @@ const operatorsElements = document.querySelectorAll(".operator");
 operatorsElements.forEach((element) => {
     element.addEventListener("click", (event) => {
         // If operator is not set, set it
-        if (!operator) operator = event.target.value;
+        if (!operator) {
+            operator = event.target.value;
+        }
         // If operator is set and operands are ready, manually trigger the equals event listener
-        if (operator && operand1 && operand2) {
+        else if (operator && operand1 && operand2) {
             let mouseEvent = new MouseEvent("click");
             document.querySelector(".equal").dispatchEvent(mouseEvent);
             // Set the new operator
             operator = event.target.value;
         }
+        // If operator is set but operand2 is not, just update the operator
+        else if (operator && !operand2) operator = event.target.value;
         updateDisplay();
     });
 });
@@ -104,7 +110,7 @@ equalElement.addEventListener("click", (event) => {
     result = operate(+operand1, operator, +operand2);
     updateDisplay();
     // Set operand1 to the result, for possible chain operation, converting back to a string
-    operand1 = result.toString();
+    operand1 = result === Infinity ? "" : result.toString();
     clearAll(true);
 });
 
