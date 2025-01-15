@@ -95,8 +95,8 @@ equalElement.addEventListener("click", (event) => {
     if (!operator) return 1;
     result = operate(+operand1, operator, +operand2);
     updateDisplay();
-    // Set operand1 to the result, for possible chain operation
-    operand1 = result;
+    // Set operand1 to the result, for possible chain operation, converting back to a string
+    operand1 = result.toString();
     clearAll(true);
 });
 
@@ -104,5 +104,18 @@ equalElement.addEventListener("click", (event) => {
 const clearElement = document.querySelector(".clear");
 clearElement.addEventListener("click", (event) => {
     clearAll();
+    updateDisplay();
+});
+
+// Delete button
+const delElement = document.querySelector(".del");
+delElement.addEventListener("click", (event) => {
+    // If operator is set, delete from operand2
+    if (operator) {
+        operand2 = operand2.slice(0, -1);
+    } else {
+        // Otherwise delete from operand1
+        operand1 = operand1.slice(0, -1);
+    }
     updateDisplay();
 });
