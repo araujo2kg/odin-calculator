@@ -72,9 +72,11 @@ operandsElements.forEach((element) => {
     element.addEventListener("click", (event) => {
         // If operator is set, update operand2
         if (operator) {
+            if (event.target.value === "." && operand2.includes(".")) return 1;
             operand2 += event.target.value;
         } else {
             // If operator is not set, update operand1
+            if (event.target.value === "." && operand1.includes(".")) return 1;
             operand1 += event.target.value;
         }
         updateDisplay();
