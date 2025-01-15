@@ -35,6 +35,7 @@ function operate(x, operator, y) {
 
         default:
             console.log("Invalid operator");
+            return "";
     }
 }
 
@@ -50,7 +51,7 @@ function updateDisplay() {
         ? (displayOperation.textContent = `${operand1} ${operator}`)
         : (displayOperation.textContent = operand1);
 
-    if (result) {
+    if (result || result === 0) {
         displayOperation.textContent = `${operand1} ${operator} ${operand2}`;
         displayResult.textContent = result;
     }
@@ -90,9 +91,18 @@ operatorsElements.forEach((element) => {
 // Equals
 const equalElement = document.querySelector(".equal");
 equalElement.addEventListener("click", (event) => {
+    // If operator not set, ignore equal operation
+    if (!operator) return 1;
     result = operate(+operand1, operator, +operand2);
     updateDisplay();
     // Set operand1 to the result, for possible chain operation
     operand1 = result;
     clearAll(true);
+});
+
+// Clear button
+const clearElement = document.querySelector(".clear");
+clearElement.addEventListener("click", (event) => {
+    clearAll();
+    updateDisplay();
 });
