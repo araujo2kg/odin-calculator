@@ -42,17 +42,17 @@ function updateDisplay() {
     const displayResult = document.querySelector(".display .result");
     const displayOperation = document.querySelector(".display .operation");
 
-    operator
-        ? (displayResult.textContent = operand2)
-        : (displayResult.textContent = operand1);
-
-    operator
-        ? (displayOperation.textContent = `${operand1} ${operator}`)
-        : (displayOperation.textContent = operand1);
+    if (operator) {
+        displayResult.textContent = operand2;
+        displayOperation.textContent = `${operand1} ${operator}`;
+    } else {
+        displayResult.textContent = operand1;
+        displayOperation.textContent = operand1;
+    }
 
     if (result || result === 0) {
         displayOperation.textContent = `${operand1} ${operator} ${operand2}`;
-        displayResult.textContent = result;
+        displayResult.textContent = result.toString().substring(0, 19);
     }
 
     if (result === Infinity) displayResult.textContent = "What?";
