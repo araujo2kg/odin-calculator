@@ -51,8 +51,8 @@ body {
 }
 
 .operation {
-    font-size: 12px;
-    font-weight: lighter;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .buttons {
@@ -64,7 +64,7 @@ body {
 }
 
 .buttons button {
-    background-color: gold;
+    background-color: white;
     border: 1px solid black;
     border-radius: 5px;
     padding: 0;
@@ -76,10 +76,20 @@ body {
 
 .buttons button:hover {
     background-color: red;
+    cursor: pointer;
 }
 
-button[value="="] {
+.buttons .equal {
     width: 150px;
     height: 60px;
     background-color: tomato;
+}
+
+.buttons .operator {
+    background-color: #fec3a6;
+}
+
+.buttons .del,
+.buttons .clear {
+    background-color: #ff928b;
 }
