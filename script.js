@@ -34,7 +34,6 @@ function operate(x, operator, y) {
             return divide(x, y);
 
         default:
-            console.log("Invalid operator");
             return "";
     }
 }
@@ -67,46 +66,51 @@ function clearAll(chain = false) {
 }
 
 // Operands
+function handleOperands(value) {
+    // If operator is set, update operand2
+    if (operator) {
+        if (value === "." && operand2.includes(".")) return 1;
+        operand2 += value;
+    } else {
+        // If operator is not set, update operand1
+        if (value === "." && operand1.includes(".")) return 1;
+        operand1 += value;
+    }
+    updateDisplay();
+}
 const operandsElements = document.querySelectorAll(".operand");
 operandsElements.forEach((element) => {
     element.addEventListener("click", (event) => {
-        // If operator is set, update operand2
-        if (operator) {
-            if (event.target.value === "." && operand2.includes(".")) return 1;
-            operand2 += event.target.value;
-        } else {
-            // If operator is not set, update operand1
-            if (event.target.value === "." && operand1.includes(".")) return 1;
-            operand1 += event.target.value;
-        }
-        updateDisplay();
+        handleOperands(event.target.value);
     });
 });
 
 // Operators
+function handleOperators(value) {
+    // If operator is not set, set it
+    if (!operator) {
+        operator = value;
+    }
+    // If operator is set and operands are ready, manually trigger the equals event listener
+    else if (operator && operand1 && operand2) {
+        let mouseEvent = new MouseEvent("click");
+        document.querySelector(".equal").dispatchEvent(mouseEvent);
+        // Set the new operator
+        operator = value;
+    }
+    // If operator is set but operand2 is not, just update the operator
+    else if (operator && !operand2) operator = value;
+    updateDisplay();
+}
 const operatorsElements = document.querySelectorAll(".operator");
 operatorsElements.forEach((element) => {
     element.addEventListener("click", (event) => {
-        // If operator is not set, set it
-        if (!operator) {
-            operator = event.target.value;
-        }
-        // If operator is set and operands are ready, manually trigger the equals event listener
-        else if (operator && operand1 && operand2) {
-            let mouseEvent = new MouseEvent("click");
-            document.querySelector(".equal").dispatchEvent(mouseEvent);
-            // Set the new operator
-            operator = event.target.value;
-        }
-        // If operator is set but operand2 is not, just update the operator
-        else if (operator && !operand2) operator = event.target.value;
-        updateDisplay();
+        handleOperators(event.target.value);
     });
 });
 
 // Equals
-const equalElement = document.querySelector(".equal");
-equalElement.addEventListener("click", (event) => {
+function handleEquals() {
     // If operator not set, ignore equal operation
     if (!operator) return 1;
     result = operate(+operand1, operator, +operand2);
@@ -114,18 +118,20 @@ equalElement.addEventListener("click", (event) => {
     // Set operand1 to the result, for possible chain operation, converting back to a string
     operand1 = result === Infinity ? "" : result.toString();
     clearAll(true);
-});
+}
+const equalElement = document.querySelector(".equal");
+equalElement.addEventListener("click", handleEquals);
 
 // Clear button
-const clearElement = document.querySelector(".clear");
-clearElement.addEventListener("click", (event) => {
+function handleClear() {
     clearAll();
     updateDisplay();
-});
+}
+const clearElement = document.querySelector(".clear");
+clearElement.addEventListener("click", handleClear);
 
 // Delete button
-const delElement = document.querySelector(".del");
-delElement.addEventListener("click", (event) => {
+function handleDelete() {
     // If operator is set, delete from operand2
     if (operator) {
         operand2 = operand2.slice(0, -1);
@@ -134,4 +140,30 @@ delElement.addEventListener("click", (event) => {
         operand1 = operand1.slice(0, -1);
     }
     updateDisplay();
+}
+const delElement = document.querySelector(".del");
+delElement.addEventListener("click", handleDelete);
+
+// Keyboard support
+document.addEventListener("keydown", (event) => {
+    // Operands
+    if (Number.isInteger(+event.key) || event.key === ".") {
+        handleOperands(event.key);
+    }
+    // Operators
+    else if (["*", "/", "-", "+"].includes(event.key)) {
+        handleOperators(event.key);
+    }
+    // Equals
+    else if (event.key === "=" || event.key === "Enter") {
+        handleEquals();
+    }
+    // Delete / Backspace
+    else if (event.key === "Backspace") {
+        handleDelete();
+    }
+    // Clear
+    else if (event.key === "Delete") {
+        handleClear();
+    }
 });
